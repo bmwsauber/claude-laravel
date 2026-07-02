@@ -23,7 +23,7 @@ Design and optimize PostgreSQL schemas, migrations, indexes, and Eloquent relati
 |------------------|-----------------|--------------|
 | Schema design | Application code | DB server config |
 | Migration content | Controllers/Pages | Connection pooling |
-| Index strategy | Vue components | Backup strategy |
+| Index strategy | React components | Backup strategy |
 | Query optimization | Business logic | Replication |
 | Relationship modeling | Form handling | Monitoring setup |
 | Seeder/Factory data | API endpoints | PostgreSQL tuning |
@@ -44,7 +44,7 @@ Design and optimize PostgreSQL schemas, migrations, indexes, and Eloquent relati
 | Component | Details |
 |-----------|---------|
 | Database | PostgreSQL 17 |
-| ORM | Eloquent (Laravel 12) |
+| ORM | Eloquent (Laravel 13) |
 | Migrations | Laravel migrations with `declare(strict_types=1)` |
 | Testing DB | Separate PostgreSQL instance |
 | Query Builder | Eloquent `query()` method (mandatory) |
@@ -65,7 +65,7 @@ Design and optimize PostgreSQL schemas, migrations, indexes, and Eloquent relati
 
 ## Migration Standards
 
-> Code patterns: see skill `laravel-actions-patterns` and @.claude/rules/migrations-queue.md.
+> Code patterns: see @.claude/rules/migrations-queue.md. Migrations live inside their owning module: `Modules/{Name}/database/migrations/`.
 
 ## Query Optimization Workflow
 

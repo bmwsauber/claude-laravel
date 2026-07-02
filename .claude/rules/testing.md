@@ -26,33 +26,34 @@ Where to test model functionality instead:
 - Feature tests via HTTP endpoints and workflows
 - Integration tests for model interactions
 - Observer tests for event handlers
-- Action/Service tests for business logic
+- Controller/Service tests for business logic
 
 ## Framework & Tools
 
-- **Pest PHP** — BDD-style syntax (`describe()` + `it()` + `expect()`)
-- **Mutation Testing** with Infection — `--mutate --covered-only --parallel --min=100`
-- **Architectural Testing** — enforced via `tests/Unit/ArchTest.php`
+- **PHPUnit** — `extends TestCase`, `public function test_*(): void`, `$this->assertX()`
+- **Mutation Testing** with Infection — `--threads=max --min-msi=100`
+- **Architectural Testing** — enforced via `tests/Unit/ArchTest.php` (`ta-tikoma/phpunit-architecture-test`)
 
 ## Test Structure
 
 ```
 tests/
 ├── Feature/          # Integration tests (Auth, Posts, Pages)
-├── Unit/             # Unit tests (Actions, Models, Observers, Support)
-├── Pest.php          # Pest configuration
+├── Unit/             # Unit tests (Services, Models, Observers, Support)
 └── TestCase.php      # Base test case
 ```
+
+Module-specific tests may also live alongside the module: `Modules/{Name}/tests/`.
 
 ## Running Tests
 
 All tests run in Docker. Feature tests do not need to mutate.
 
 ```bash
-docker compose exec app php artisan test                    # all tests
-docker compose exec app php artisan test --coverage         # with coverage
-docker compose exec app php artisan test --mutate --covered-only --parallel --min=100  # mutation
-docker compose exec app php artisan test tests/Unit/ExampleTest.php  # specific file
+docker compose exec app php artisan test                                       # all tests
+docker compose exec app php artisan test --coverage                            # with coverage
+docker compose exec app ./vendor/bin/infection --threads=max --min-msi=100     # mutation
+docker compose exec app php artisan test tests/Unit/ExampleTest.php            # specific file
 ```
 
 ## Test Configuration
@@ -69,32 +70,41 @@ docker compose exec app php artisan test tests/Unit/ExampleTest.php  # specific 
 
 declare(strict_types=1);
 
-mutates(YourClass::class);
+namespace Tests\Unit;
 
-describe('Feature Description', function (): void {
-    beforeEach(function (): void {
+use Tests\TestCase;
+
+final class YourClassTest extends TestCase
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+
         $this->user = User::factory()->create();
-    });
+    }
 
-    it('describes what it tests', function (): void {
+    public function test_it_describes_what_it_tests(): void
+    {
         $result = someFunction();
-        expect($result)->toBe('expected_value');
-    });
-});
+
+        $this->assertSame('expected_value', $result);
+    }
+}
 ```
 
-### Testing Actions
+### Testing Controllers/Services
 
 ```php
-it('handles the action correctly', function (): void {
-    $action = new YourAction();
-    $result = $action->handle($request, $parameters);
+public function test_it_updates_the_post(): void
+{
+    $post = Post::factory()->create();
 
-    expect($result)
-        ->toBeInstanceOf(RedirectResponse::class)
-        ->and($result->getTargetUrl())
-        ->toBe(route('expected.route'));
-});
+    $response = $this->actingAs($post->author)
+        ->put(route('posts.update', $post), ['title' => 'New title']);
+
+    $response->assertRedirect(route('posts.index'));
+    $this->assertSame('New title', $post->refresh()->title);
+}
 ```
 
 ## Architectural Testing
@@ -102,5 +112,5 @@ it('handles the action correctly', function (): void {
 Enforced rules (`tests/Unit/ArchTest.php`):
 - No debugging functions in production code
 - Models must extend Eloquent Model
-- Page actions must have 'Page' suffix
+- Controllers must have 'Controller' suffix
 - Enums must be proper enum classes

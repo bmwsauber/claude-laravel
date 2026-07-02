@@ -2,14 +2,14 @@
 
 ## Form Request
 
-All form submissions require a Form Request. Never validate in the Action body.
+All form submissions require a Form Request. Never validate in the Controller or Service body.
 
 ```php
 <?php
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\Post;
+namespace Modules\Post\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -17,7 +17,7 @@ final class StorePostRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true; // Auth check done via Policy in the Action
+        return true; // Auth check done via Policy in the Controller
     }
 
     /** @return array<string, array<string>> */
@@ -31,23 +31,21 @@ final class StorePostRequest extends FormRequest
 }
 ```
 
-## Authorization in Actions
+## Authorization in Controllers
 
-Use `authorize()` in `AsController` actions for Policy checks:
+Call `$this->authorize()` in the Controller for Policy checks, then delegate to the Service:
 
 ```php
-class UpdatePost
+final class UpdatePostController extends Controller
 {
-    use AsController;
+    public function __construct(private readonly PostService $posts) {}
 
-    public function authorize(UpdatePostRequest $request, Post $post): bool
+    public function __invoke(UpdatePostRequest $request, Post $post): RedirectResponse
     {
-        return $request->user()->can('update', $post);
-    }
+        $this->authorize('update', $post);
 
-    public function handle(UpdatePostRequest $request, Post $post): RedirectResponse
-    {
-        $post->update($request->validated());
+        $this->posts->update($post, $request->validated());
+
         return redirect()->route('posts.index');
     }
 }
@@ -60,9 +58,9 @@ class UpdatePost
 
 declare(strict_types=1);
 
-namespace App\Policies;
+namespace Modules\Post\Policies;
 
-use App\Models\Post;
+use Modules\Post\Models\Post;
 use App\Models\User;
 
 final class PostPolicy
@@ -79,11 +77,11 @@ final class PostPolicy
 }
 ```
 
-Register in `AppServiceProvider::boot()`:
+Register in the module's `ServiceProvider::boot()`:
 ```php
 Gate::policy(Post::class, PostPolicy::class);
 ```
 
 ## Validation Error Flow
 
-Laravel Form Request errors → `$page.props.errors` in Inertia → `useForm().errors.field` in Vue.
+Laravel Form Request errors → `$page.props.errors` in Inertia → `useForm().errors.field` in React.

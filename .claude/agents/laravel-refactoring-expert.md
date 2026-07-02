@@ -22,7 +22,7 @@ Surgical, high-impact refactoring that improves code quality while maintaining b
 | This Agent (Refactoring) | Developer Agent | DBA Agent |
 |-------------------------|-----------------|-----------|
 | Code smell elimination | New features | Schema optimization |
-| Complexity reduction | Vue components | Index strategy |
+| Complexity reduction | React components | Index strategy |
 | N+1 query fixes | Form handling | Migration design |
 | Extract method/class | API endpoints | Query performance |
 | Pattern alignment | Inertia integration | Database tuning |
@@ -34,8 +34,8 @@ Surgical, high-impact refactoring that improves code quality while maintaining b
 | `laravel-architecture` | **Always** — architectural patterns and layer responsibilities |
 | `laravel-specialist` | **Always** — Laravel coding standards and conventions |
 | `code-reviewer` | **Always** — self-review methodology after refactoring |
-| `php-pro` | PHP 8.4+ strict typing, modern features |
-| `pest-testing` | When refactoring affects test code |
+| `php-pro` | PHP 8.5+ strict typing, modern features |
+| `phpunit-testing` | When refactoring affects test code |
 | `security-reviewer` | When refactoring auth or input handling |
 
 > See `.claude/rules/mcp-stack.md` for MCP tool reference.
@@ -49,30 +49,29 @@ Surgical, high-impact refactoring that improves code quality while maintaining b
 
 ## Project Architecture (CRITICAL)
 
-### Layer Stack: Actions-Based (NOT MVC)
+### Layer Stack: Modular Controllers + Services
 
 | Layer | Location | Responsibility |
 |-------|----------|---------------|
-| **Page Actions** (`AsController`) | `app/Actions/Pages/*` | Render Inertia pages |
-| **Store/Update Actions** (`AsController`) | `app/Actions/{Domain}/*` | Handle form submissions |
-| **Business Actions** (`AsObject`) | `app/Actions/{Domain}/*` | Reusable business logic |
-| **Services** | `app/Services/` | Cross-domain orchestration |
-| **Models** | `app/Models/` | Eloquent ORM, relationships |
-| **Observers** | `app/Observers/` | Model lifecycle side effects |
-| **Policies** | `app/Policies/` | Authorization rules |
-| **Enums** | `app/Enums/` | Value objects, fixed sets |
-| **Form Requests** | `app/Http/Requests/` | Input validation |
+| **Controllers** | `Modules/{Name}/Http/Controllers/` | HTTP entry, authorization, render Inertia pages, handle form submissions |
+| **Services** | `Modules/{Name}/Services/` | Business logic, cross-domain orchestration |
+| **Models** | `Modules/{Name}/Models/` | Eloquent ORM, relationships |
+| **Observers** | `Modules/{Name}/Observers/` | Model lifecycle side effects |
+| **Policies** | `Modules/{Name}/Policies/` | Authorization rules |
+| **Enums** | `Modules/{Name}/Enums/` | Value objects, fixed sets |
+| **Form Requests** | `Modules/{Name}/Http/Requests/` | Input validation |
 
-> **No Controllers, no Repositories, no `app/Domain/` directory.**
+> Each domain is a module (`nwidart/laravel-modules`), namespace has no `App` segment.
+> No Repository pattern.
 
 ## Refactoring Methodology
 
 1. **Analyze**: map dependencies, run baseline tests (`--filter=TargetClass`), check cognitive complexity (function: 8, class: 85)
-2. **Strategy**: align with Actions pattern; use PHP 8.4 features; minimize public interface changes
-3. **Implement**: see skill `laravel-actions-patterns` for canonical examples
+2. **Strategy**: keep Controllers thin, push logic into Services; use PHP 8.5 features; minimize public interface changes
+3. **Implement**:
    - N+1 → `->with('relation:id,name')` eager loading
    - Cognitive complexity → early returns (guard clauses)
-   - Fat Action → extract `AsObject` Business Action, keep `AsController` thin
+   - Fat Controller → extract logic into a Service, keep the Controller thin
 4. **Verify**: `pint --dirty`, `phpstan analyse`, full test suite passes
 
 ## Performance Checks

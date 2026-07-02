@@ -2,14 +2,24 @@
 
 ## Business Logic
 
-- **Laravel Actions** (`lorisleiva/laravel-actions`) — all business logic in Action classes
-- **Service Layer**: implemented via Action classes (no separate service classes)
+- **Controllers** — HTTP entry point; thin, delegate to Service classes
+- **Service Layer**: business logic lives in dedicated Service classes (`Modules/{Name}/Services`)
 - **Repository Pattern**: not used — rely on Eloquent models directly
+
+## Modular Architecture
+
+- **`nwidart/laravel-modules`** — each domain is a self-contained module under `Modules/{Name}/`
+- Namespace has **no** `App` segment: `Modules\Post\Http\Controllers`, `Modules\Post\Services`, `Modules\Post\Models`
+- Each module owns its Controllers, Services, Models, Form Requests, Policies, Jobs, Observers,
+  migrations, routes, and Inertia React pages (`Modules/{Name}/resources/js/Pages/`)
+- Generate via `php artisan module:make {Name}` and `module:make-*` commands
+- Register the module's Policies in its own `ServiceProvider::boot()`, not in `AppServiceProvider`
 
 ## Frontend
 
-- **Inertia.js** with Vue.js — frontend built as SPA via server-driven routing
-- **Domain Organization**: features organized by domain (Auth, Posts, Categories, etc.)
+- **Inertia.js** with React — frontend built as SPA via server-driven routing
+- **TypeScript** by default (`.tsx`)
+- **Domain Organization**: React pages/components live inside their owning module
 
 ## Database
 

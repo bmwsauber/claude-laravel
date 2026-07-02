@@ -16,7 +16,7 @@
 | Tool | When to Use |
 |------|-------------|
 | `resolve-library-id` | Find library ID before querying |
-| `query-docs` | Vue 3, Pinia (frontend libs not covered by Laravel Boost) |
+| `query-docs` | React 19, React hooks (frontend libs not covered by Laravel Boost) |
 
 ## GitHub MCP
 

@@ -5,7 +5,7 @@
 - All PHP files must declare `declare(strict_types=1)`
 - Full type hints required for all parameters and return types
 - Use `===` instead of `==` (strict comparisons)
-- Use PHP 8.4 features and modern type casting
+- Use PHP 8.5 features and modern type casting
 - Trailing commas in multiline arrays and parameters
 
 ## Class Organization
@@ -22,11 +22,17 @@ Specific order for class elements:
 - Eager loading: `with()`, `withCount()`, `withTrashed()`
 - Prefer Eloquent relationships, scopes, pagination, soft deletes over raw queries
 
+## Module Namespacing
+
+- Domain code lives in `Modules/{Name}/` (`nwidart/laravel-modules`)
+- Namespace has **no** `App` segment — `Modules\Post\Http\Controllers`, `Modules\Post\Services`, `Modules\Post\Models`
+- Never write `Modules\Post\App\...`
+
 ## Code Quality Tools
 
 | Tool | Purpose | Config |
 |------|---------|--------|
 | Laravel Pint | Code formatting | Laravel preset with strict rules |
 | PHPStan (Level 7) | Static analysis | Larastan for Laravel-specific checks |
-| Rector | Code modernization | PHP 8.4 + Laravel 12.0 |
+| Rector | Code modernization | PHP 8.5 + Laravel 13.0 |
 | Cognitive Complexity | Complexity limits | class: 85, function: 8 |

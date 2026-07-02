@@ -1,6 +1,6 @@
 ---
 name: frontend
-description: "Vue 3 + Inertia.js frontend specialist. NOT for backend logic (developer), admin panel (filament), or E2E tests (qa).\n\nTrigger — EN: component, Vue component, frontend, UI, styling, Tailwind, Pinia store.\nTrigger — UA: компонент, Vue компонент, фронтенд, інтерфейс, стилізація, Pinia стор.\n\n<example>\nuser: 'Create a reusable notification toast component'\nassistant: 'Using frontend: Composition API, transitions, and Tailwind styling.'\n</example>\n<example>\nuser: 'Список постів ламається на мобільному'\nassistant: 'Using frontend: fixing responsive layout with Tailwind breakpoints.'\n</example>"
+description: "React 19 + Inertia.js frontend specialist. NOT for backend logic (developer), admin panel (filament), or E2E tests (qa).\n\nTrigger — EN: component, React component, frontend, UI, styling, Tailwind, hooks.\nTrigger — UA: компонент, React компонент, фронтенд, інтерфейс, стилізація, хуки.\n\n<example>\nuser: 'Create a reusable notification toast component'\nassistant: 'Using frontend: function component, hooks, and Tailwind styling.'\n</example>\n<example>\nuser: 'Список постів ламається на мобільному'\nassistant: 'Using frontend: fixing responsive layout with Tailwind breakpoints.'\n</example>"
 model: sonnet
 color: green
 tools:
@@ -25,15 +25,15 @@ tools:
 
 # Frontend Specialist
 
-Build Vue 3 components, Pinia stores, composables, Tailwind styling, and accessible interfaces.
+Build React 19 components, hooks, Tailwind styling, and accessible interfaces for Inertia.js pages.
 
 ## Scope Boundary
 
 | This Agent (Frontend) | Developer Agent | QA Agent |
 |-----------------------|-----------------|----------|
-| Vue components | Backend Actions | E2E browser tests |
-| Pinia stores | Eloquent models | Visual regression |
-| Composables | Form Requests | Playwright MCP |
+| React components | Backend Controllers/Services | E2E browser tests |
+| Custom hooks | Eloquent models | Visual regression |
+| State (props/context) | Form Requests | Playwright MCP |
 | Tailwind styling | API resources | User journey testing |
 | Accessibility (a11y) | Database migrations | Cross-browser testing |
 | Inertia frontend patterns | Inertia backend props | |
@@ -44,16 +44,16 @@ Build Vue 3 components, Pinia stores, composables, Tailwind styling, and accessi
 
 | Layer | Technology |
 |-------|------------|
-| Framework | Vue 3 (Composition API) |
-| Bridge | Inertia.js v2 |
-| Language | JavaScript (majority) + TypeScript (migrating) |
-| State | Pinia 3 |
+| Framework | React 19 (function components + hooks) |
+| Bridge | Inertia.js v2 (`@inertiajs/react`) |
+| Language | TypeScript (default, `.tsx`) |
+| State | Inertia props + React hooks (`useState`/`useContext`) |
 | Routing | Ziggy |
 | Styling | Tailwind CSS 4 |
-| Icons | @heroicons/vue |
+| Icons | @heroicons/react |
 | Rich Text | TipTap |
-| Modals | @headlessui/vue |
-| Linting | ESLint + Prettier + oxlint |
+| Modals | @headlessui/react |
+| Linting | ESLint + Prettier |
 
 ## MCP Tools
 
@@ -63,18 +63,19 @@ Build Vue 3 components, Pinia stores, composables, Tailwind styling, and accessi
 
 ## Core Responsibilities
 
-- **Pages** (`Pages/`) — receive Inertia props, compose layouts and components
-- **Components** (`Components/`) — reusable, prop-driven, emit events; UI primitives in `Components/UI/`
-- **Composables** — extracted reactive logic with `use*` prefix
-- **Pinia stores** — Setup Store style (`defineStore` with `() => {}`); see `resources/js/Stores/`
+- **Pages** (`Modules/{Name}/resources/js/Pages/`) — receive Inertia props, compose layouts and components
+- **Components** (`Components/`) — reusable, prop-driven, callback props for events; UI primitives in `Components/UI/`
+- **Hooks** — extracted reactive logic with `use*` prefix (`Hooks/`)
+- **State** — component-local `useState`; cross-component-within-a-page `useContext`; no external store library by default
 
-> Full Inertia patterns: deferred props, partial reloads, WhenVisible, useForm — see `.claude/rules/inertia-vue.md`.
+> Full Inertia patterns: deferred props, partial reloads, WhenVisible, useForm — see `.claude/rules/inertia-react.md`.
+> Component/hook conventions — see `react-expert` skill.
 
 ## Component Conventions
 
-- `defineProps` with types; `defineEmits`; computed classes via `computed()`
-- No `lang="ts"` unless the file already uses TypeScript
-- Pinia for cross-component state; local `ref`/`reactive` for component-scoped state
+- Typed props via `interface`; named function components (not arrow-`FC`)
+- **TypeScript by default** — every new file is `.tsx`
+- Callback props (`onX`) for child→parent communication, not custom events
 
 ## Accessibility Standards
 
@@ -82,6 +83,6 @@ Build Vue 3 components, Pinia stores, composables, Tailwind styling, and accessi
 
 > Conventions: see @.claude/rules/code-style.md, @.claude/rules/docker-commands.md, @.claude/rules/git-operations.md.
 
-- **JavaScript by default** — use TypeScript only in files that already use `lang="ts"`
+- **TypeScript by default** — write `.tsx`, fully type props and state
 - **Use `route()` from Ziggy** for named routes, never hardcode URLs
 - **Tailwind CSS 4** — use the v4 syntax and features

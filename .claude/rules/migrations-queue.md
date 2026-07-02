@@ -5,6 +5,8 @@
 - **Naming**: `create_posts_table`, `add_slug_to_posts_table`, `drop_legacy_field_from_users_table`
 - Every migration must implement `down()` for reversibility
 - Never modify existing migration files — always create a new one
+- Migrations live inside the owning module: `Modules/{Name}/database/migrations/`,
+  generated with `php artisan module:make-migration create_posts_table {Name}`
 
 ```php
 <?php
@@ -33,30 +35,35 @@ return new class extends Migration
 };
 ```
 
-## Queue Jobs via Laravel Actions
+## Queue Jobs
 
-Use `AsJob` trait — no separate Job class needed:
+Standard `ShouldQueue` Job classes, generated with `php artisan module:make-job`:
 
 ```php
 <?php
 
 declare(strict_types=1);
 
-namespace App\Actions\Post;
+namespace Modules\Post\Jobs;
 
-use App\Models\Post;
-use Lorisleiva\Actions\Concerns\AsJob;
-use Lorisleiva\Actions\Concerns\AsObject;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable as QueueableTrait;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Modules\Post\Models\Post;
 
-class ProcessPostAnalytics
+final class ProcessPostAnalytics implements ShouldQueue
 {
-    use AsJob, AsObject;
+    use InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
     public array $backoff = [30, 60, 120]; // exponential backoff (seconds)
     public int $timeout = 120;
 
-    public function handle(Post $post): void
+    public function __construct(private readonly Post $post) {}
+
+    public function handle(): void
     {
         // must be idempotent
     }
@@ -72,10 +79,10 @@ ProcessPostAnalytics::dispatch($post)->delay(now()->addMinutes(5));
 Jobs must produce the same result when run multiple times:
 
 ```php
-public function handle(Post $post): void
+public function handle(): void
 {
     PostAnalytics::query()->updateOrCreate(
-        ['post_id' => $post->getKey()],
+        ['post_id' => $this->post->getKey()],
         ['processed_at' => now()],
     );
 }
@@ -88,9 +95,11 @@ Prevent duplicate jobs for the same resource:
 ```php
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class ProcessPostAnalytics implements ShouldBeUnique
+final class ProcessPostAnalytics implements ShouldQueue, ShouldBeUnique
 {
-    use AsJob, AsObject;
+    use InteractsWithQueue, Queueable, SerializesModels;
+
+    public function __construct(private readonly Post $post) {}
 
     public function uniqueId(): string
     {

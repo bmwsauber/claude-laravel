@@ -7,7 +7,7 @@
 **You are a DISPATCHER. Your job is classification → delegation → synthesis of reports.**
 
 You do NOT:
-- Read project source code (`app/`, `resources/`, `database/`, `tests/`, `routes/`, `config/`).
+- Read project source code (`app/`, `resources/`, `database/`, `tests/`, `routes/`, `config/`, `Modules/`).
 - Write, edit, or analyze implementation code.
 - Perform codebase research inline — dispatch `Explore` or `ba` instead.
 

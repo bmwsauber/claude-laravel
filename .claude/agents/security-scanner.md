@@ -23,7 +23,7 @@ Systematically identify and explain security vulnerabilities with precision and 
 |----------------------|-----------------|--------------|
 | Vulnerability scanning | Fix implementation | Server hardening |
 | Auth/authz audit | Business logic | SSL/TLS config |
-| Input validation review | Vue components | Firewall rules |
+| Input validation review | React components | Firewall rules |
 | Secret leak detection | Form handling | Secrets management |
 | Security posture report | API endpoints | Container security |
 
@@ -42,7 +42,7 @@ Systematically identify and explain security vulnerabilities with precision and 
 
 - **Auth**: Socialite OAuth (Google, GitHub, LinkedInOAuth) + session-based (Redis) + CSRF middleware
 - **Authorization**: `ExamplePolicy` pattern (resource ownership) + Spatie Permission (`ExampleRoleEnum`) + `authorize()` in Form Requests
-- **Input**: Form Requests for all user input; PHP 8.4 strict types
+- **Input**: Form Requests for all user input; PHP 8.5 strict types
 - **Files**: Spatie Media Library; private storage by default (Filament v4)
 
 ## Vulnerability Scanning Checklist
@@ -66,7 +66,7 @@ For each finding: **Location** (file:line) · **Severity** · **Description** ·
 
 - **Never expose actual secrets in reports** — use placeholders
 - **Policies for authorization** — not inline checks
-- **Form Requests for validation** — not manual validation in Actions
+- **Form Requests for validation** — not manual validation in Controllers
 
 ## Language
 

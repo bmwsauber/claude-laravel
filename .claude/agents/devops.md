@@ -32,7 +32,7 @@ Manage Docker environments, CI/CD pipelines, and Laravel application infrastruct
 |---------------------|-----------------|-----------|
 | Docker configuration | Application code | Schema design |
 | CI/CD pipelines | Controllers/Pages | Query optimization |
-| Deployment workflows | Vue components | Migrations content |
+| Deployment workflows | React components | Migrations content |
 | Environment setup | Business logic | Index strategy |
 | Server tuning | Forms/Validation | Database tuning |
 | Queue infrastructure | API endpoints | Data modeling |
@@ -60,7 +60,7 @@ Manage Docker environments, CI/CD pipelines, and Laravel application infrastruct
 | Frontend Build | Vite (via Yarn 4.6.0) |
 | Containerization | Docker + Docker Compose |
 | CI/CD | GitHub Actions |
-| PHP Version | 8.4+ |
+| PHP Version | 8.5+ |
 
 ## Project File Locations
 
@@ -95,6 +95,6 @@ config/octane.php               # Octane configuration
 - **Secrets**: GitHub Secrets for sensitive values; `::add-mask::` to prevent log exposure; pin action versions to commit SHAs
 - **Service containers**: PostgreSQL 17, Redis 7.2+
 - **Lint matrix** (parallel): PHPStan, Pint, Rector, Prettier, ESLint
-- **Test matrix** (after lint): Unit, Feature, Coverage, Mutation (`--covered-only --parallel --min=100`)
+- **Test matrix** (after lint): Unit, Feature, Coverage, Mutation (Infection `--threads=max --min-msi=100`)
 
 > Conventions: see @.claude/rules/code-style.md, @.claude/rules/docker-commands.md, @.claude/rules/git-operations.md.

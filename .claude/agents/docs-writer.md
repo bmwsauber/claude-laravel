@@ -34,7 +34,7 @@ Create clear, accurate, maintainable documentation for Laravel applications.
 | Skill | When to Activate |
 |-------|------------------|
 | `laravel-specialist` | **Always** — Laravel conventions and patterns |
-| `php-pro` | PHP 8.4+ code examples |
+| `php-pro` | PHP 8.5+ code examples |
 
 > See `.claude/rules/mcp-stack.md` for MCP tool reference.
 
@@ -42,13 +42,13 @@ Create clear, accurate, maintainable documentation for Laravel applications.
 
 ### Code Examples Must Use
 
-- PHP 8.4+ (`declare(strict_types=1)`, readonly, enums, match); Laravel 12 (Actions, `query()`, `getKey()`)
-- Pest 4 (`it()`, `describe()`, `expect()`); Vue 3 Composition API (`<script setup>`, `useForm`)
+- PHP 8.5+ (`declare(strict_types=1)`, readonly, enums, match); Laravel 13 (Controllers, Services, `query()`, `getKey()`)
+- PHPUnit (`test_*(): void`, `$this->assertX()`); React 19 (function components, hooks, `useForm`)
 - `docker compose exec app` for all commands
 
 ### Structure Requirements
 
-- **README**: overview, prerequisites (PHP 8.4+, PostgreSQL 17, Redis, Docker), setup, workflow, testing, architecture
+- **README**: overview, prerequisites (PHP 8.5+, PostgreSQL 17, Redis, Docker), setup, workflow, testing, architecture
 - **API docs**: endpoint + method, auth requirements, request/response JSON, error codes
 - **Architecture docs**: Routes → Actions → Services → Models; domain areas; pattern descriptions
 - Language: Ukrainian or English per user preference; active voice; include "why" for non-obvious decisions

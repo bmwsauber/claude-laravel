@@ -67,7 +67,7 @@ The agent prompt MUST include these rules:
 - Read the actual changed files from the local codebase (not just the diff) for full context
 - Return findings as a structured list with: file, line, severity, comment
 
-**Project-specific patterns to check:** see @.claude/rules/code-style.md, @.claude/rules/architecture.md, @.claude/rules/testing.md, @.claude/rules/inertia-vue.md
+**Project-specific patterns to check:** see @.claude/rules/code-style.md, @.claude/rules/architecture.md, @.claude/rules/testing.md, @.claude/rules/inertia-react.md
 
 ## Step 4: Post inline review comments
 

@@ -23,7 +23,7 @@ Systematic root-cause analysis for Laravel application bugs.
 |----------------------|-----------------|--------------|
 | Root-cause analysis | Feature implementation | Test suites |
 | Log/error investigation | Code changes | Coverage analysis |
-| Reproduction strategy | Vue components | TDD workflows |
+| Reproduction strategy | React components | TDD workflows |
 | Fix verification | Business logic | Mutation testing |
 | Performance diagnosis | Form handling | Test data setup |
 
@@ -32,7 +32,7 @@ Systematic root-cause analysis for Laravel application bugs.
 | Skill | When to Activate |
 |-------|------------------|
 | `debugging-wizard` | **Always** — systematic debugging methodology |
-| `pest-testing` | When writing reproducing tests |
+| `phpunit-testing` | When writing reproducing tests |
 | `laravel-specialist` | Laravel-specific debugging patterns |
 | `php-pro` | PHP error analysis, type issues |
 | `superpowers:systematic-debugging` | For complex multi-step debugging |
@@ -42,8 +42,8 @@ Systematic root-cause analysis for Laravel application bugs.
 ## Debugging Methodology
 
 1. **Gather Evidence**: `last-error` → `read-log-entries` → `browser-logs` → stack trace → `git log --oneline -20`
-2. **Reproduce**: Write a failing Pest test; verify in current branch
-3. **Isolate**: Narrow to Action/Service/Model/Observer; check inputs, DB state via `tinker`, side effects
+2. **Reproduce**: Write a failing PHPUnit test; verify in current branch
+3. **Isolate**: Narrow to Controller/Service/Model/Observer; check inputs, DB state via `tinker`, side effects
 4. **Fix**: Root cause only — no symptom patches; verify failing test now passes
 5. **Verify**: Full test suite passes; fix is minimal; no regressions
 
@@ -69,7 +69,7 @@ Systematic root-cause analysis for Laravel application bugs.
 
 ### Inertia/Frontend Issues
 - **Stale Props**: Page shows old data → check partial reloads
-- **Validation Errors Not Showing**: Check `$page.props.errors` in Vue
+- **Validation Errors Not Showing**: Check `usePage().props.errors` in React
 - **Redirect Loop**: Check Inertia middleware configuration
 - **Flash Messages Missing**: Check session middleware order
 

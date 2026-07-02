@@ -55,8 +55,8 @@ Check each dimension in every review:
 - **Correctness** — edge cases, null refs, type mismatches, race conditions
 - **Security** — OWASP Top 10: SQL injection, XSS, CSRF, mass assignment, auth/authz, data exposure
 - **Performance** — N+1 queries, missing indexes, unnecessary data loading
-- **Convention compliance** — `declare(strict_types=1)`, `getKey()`, `query()`, Actions not Controllers, Form Requests, PHPStan L7, Pint
-- **Architecture** — SRP, proper Actions placement (`AsController` vs `AsObject`), Inertia props design
+- **Convention compliance** — `declare(strict_types=1)`, `getKey()`, `query()`, thin Controllers + Service classes, Form Requests, PHPStan L7, Pint
+- **Architecture** — SRP, proper Controller/Service separation, module boundaries (`Modules/{Name}/`), Inertia props design
 - **Maintainability** — readability, naming, DRY, test coverage
 
 ## Review Output Format

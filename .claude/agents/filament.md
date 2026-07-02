@@ -24,19 +24,19 @@ Create admin panel resources, forms, tables, widgets, and pages following Filame
 | This Agent (Filament) | Developer Agent | Tester Agent |
 |-----------------------|-----------------|--------------|
 | Admin resources | Inertia pages | Pure unit tests |
-| Admin tables/forms | Vue components | Action tests |
+| Admin tables/forms | React components | Controller tests |
 | Admin widgets | API endpoints | Service tests |
 | Livewire tests | useForm integration | Coverage analysis |
 | Admin pages | Frontend routing | Mutation testing |
-| Admin actions | Pinia stores | Factory tests |
+| Admin actions | React state/hooks | Factory tests |
 
 ## Skills to Activate
 
 | Skill | When to Activate |
 |-------|------------------|
 | `laravel-specialist` | **Always** — Laravel context |
-| `php-pro` | **Always** — strict PHP 8.4+ |
-| `pest-testing` | Writing Filament tests |
+| `php-pro` | **Always** — strict PHP 8.5+ |
+| `phpunit-testing` | Writing Filament tests |
 | `security-reviewer` | Admin authorization and policies |
 
 > See `.claude/rules/mcp-stack.md` for MCP tool reference.
@@ -61,19 +61,34 @@ These breaking changes from v3 MUST be followed:
 
 ## Testing Filament Components
 
-Filament uses Livewire. All tests use `livewire()` or `Livewire::test()`:
+Filament uses Livewire. All tests use the `Livewire::test()` helper:
 
 ```php
-use function Pest\Livewire\livewire;
+<?php
 
-beforeEach(function (): void {
-    Filament::setCurrentPanel('admin');
-    $this->actingAs(User::factory()->admin()->create());
-});
+declare(strict_types=1);
 
-it('can list records', function (): void {
-    livewire(ListUsers::class)->assertCanSeeTableRecords(User::factory()->count(3)->create());
-});
+namespace Tests\Feature;
+
+use Livewire\Livewire;
+use Tests\TestCase;
+
+final class ListUsersTest extends TestCase
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Filament::setCurrentPanel('admin');
+        $this->actingAs(User::factory()->admin()->create());
+    }
+
+    public function test_it_can_list_records(): void
+    {
+        Livewire::test(ListUsers::class)
+            ->assertCanSeeTableRecords(User::factory()->count(3)->create());
+    }
+}
 ```
 
 - **Table tests**: `->assertCanSeeTableRecords()`, `->searchTable()`, `->assertCanNotSeeTableRecords()`

@@ -1,8 +1,8 @@
 # Claude Code Configuration for Laravel Projects
 
-A comprehensive, production-ready Claude Code configuration for Laravel + Inertia.js + Vue 3 projects. Includes 17 specialized agents, 10 rule files, 23 skills, and a structured workflow pipeline that turns Claude Code into a full AI development team.
+A comprehensive, production-ready Claude Code configuration for Laravel + Inertia.js + React projects. Includes 17 specialized agents, 10 rule files, 22 skills, and a structured workflow pipeline that turns Claude Code into a full AI development team.
 
-**Stack:** PHP 8.4 · Laravel 12 · Vue 3 · Inertia.js v2 · PostgreSQL 17 · Redis · Docker · Pest 4
+**Stack:** PHP 8.5 · Laravel 13 · React 19 · TypeScript · Inertia.js v2 · PostgreSQL 17 · Redis · Docker · PHPUnit
 
 ## What's Included
 
@@ -21,14 +21,14 @@ Specialized AI agents that handle different aspects of development. Each agent h
 | `devops` | Docker, CI/CD, deployment, GitHub Actions, infrastructure | haiku | + | GitHub MCP |
 | `docs-writer` | Technical documentation, README, API docs | haiku | + | GitHub MCP |
 | `filament` | Filament v4 admin panel resources | sonnet | + | Context7 |
-| `frontend` | Vue 3 components, Pinia, Tailwind, a11y | sonnet | + | Context7, Figma, Stitch, IDE |
+| `frontend` | React 19 components, hooks, Tailwind, a11y | sonnet | + | Context7, Figma, Stitch, IDE |
 | `integration-architect` | OAuth, webhooks, third-party services | sonnet | + | Web, Context7 |
 | `laravel-refactoring-expert` | Refactoring, N+1 fixes, code quality | sonnet | + | — |
 | `qa` | E2E testing, Playwright, visual regression | sonnet | + | All 21 Playwright tools |
 | `queue-specialist` | Redis queues, jobs, async processing | sonnet | + | — |
 | `reviewer` | Code review, architecture audit | sonnet | — | GitHub MCP (review) |
 | `security-scanner` | OWASP, auth/authz, credential leaks | opus | — | Web (CVE lookup) |
-| `tester` | Unit/feature tests, Pest, mutation testing | sonnet | + | — |
+| `tester` | Unit/feature tests, PHPUnit, mutation testing | sonnet | + | — |
 
 ### Rules (10)
 
@@ -36,26 +36,26 @@ Rule files loaded by agents and orchestrator on demand:
 
 | Rule | Purpose |
 |------|---------|
-| `architecture.md` | Actions pattern, Inertia.js, domain organization |
-| `code-style.md` | PHP 8.4 strict types, Eloquent conventions, Pint/PHPStan/Rector |
+| `architecture.md` | Controllers + Services pattern, modular domains (`nwidart/laravel-modules`), Inertia.js |
+| `code-style.md` | PHP 8.5 strict types, Eloquent conventions, module namespacing, Pint/PHPStan/Rector |
 | `docker-commands.md` | Docker-prefixed commands reference |
 | `forms-authorization.md` | Form Request + Policy + authorization patterns |
 | `git-operations.md` | Commit/push safety, PR description format |
-| `inertia-vue.md` | Inertia v2 + Vue 3 Composition API conventions |
+| `inertia-react.md` | Inertia v2 + React 19 conventions |
 | `mcp-stack.md` | MCP tool usage guide (Laravel Boost, Context7, GitHub, Figma) |
-| `migrations-queue.md` | Migration conventions, AsJob queue pattern |
-| `testing.md` | Pest 4, mutation testing, model testing policy |
+| `migrations-queue.md` | Migration conventions, standard queue Job pattern |
+| `testing.md` | PHPUnit, mutation testing, model testing policy |
 | `workflow.md` | Agent pipeline orchestration + agent routing table |
 
 Three files (`workflow.md`, `code-style.md`, `git-operations.md`) are auto-imported in `CLAUDE.md` via `@`-imports — always in context. The rest are loaded by agents on demand via reference links.
 
-### Skills (23)
+### Skills (22)
 
 Reusable knowledge modules organized by category:
 
-**Laravel & PHP:** `laravel-architecture`, `php-pro`, `laravel-actions-patterns` *(custom)*
+**Laravel & PHP:** `laravel-architecture`, `php-pro`
 
-**Testing:** `pest-testing`, `test-master`, `playwright-expert`, `playwright-skill`
+**Testing:** `phpunit-testing` *(custom)*, `test-master`, `playwright-expert`, `playwright-skill`
 
 **Database:** `database-optimizer`, `postgresql`, `postgres-best-practices`
 
@@ -65,7 +65,7 @@ Reusable knowledge modules organized by category:
 
 **Debugging & Security:** `debugging-wizard`, `security-reviewer`
 
-**Frontend:** `vue-expert`
+**Frontend:** `react-expert` *(custom)*
 
 **Infrastructure:** `octane-frankenphp-gotchas` *(custom)*
 
@@ -214,21 +214,21 @@ Trigger words — DE: schlüsselwort1, schlüsselwort2.
 
 ## Architecture Overview
 
-This configuration follows the **Laravel Actions** pattern (`lorisleiva/laravel-actions`):
+This configuration follows a **modular Controllers + Services** pattern, organized into domains via
+`nwidart/laravel-modules` (`Modules/{Name}/`, namespace with no `App` segment):
 
 | Layer | Pattern |
 |-------|---------|
-| HTTP entry | Page Actions (`AsController`) |
-| Form handling | Store/Update Actions (`AsController`) |
-| Business logic | Business Actions (`AsObject`) |
+| HTTP entry | Controllers |
+| Business logic | Service classes |
 | Authorization | Policies |
 | Validation | Form Requests |
 | Side effects | Observers |
 | Value objects | Enums |
-| Async work | Jobs (`ShouldQueue`) |
+| Async work | standard Job classes (`ShouldQueue`) |
 | Cross-cutting | Events / Listeners |
 
-No traditional Controllers, no Repository pattern, no `app/Domain/` directory.
+No Repository pattern. No flat `app/Domain/` directory — domains live in `Modules/{Name}/`.
 
 
 ## Few Claude Code Structure

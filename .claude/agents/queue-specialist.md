@@ -21,9 +21,9 @@ Build reliable, idempotent jobs for Laravel Redis-based queue infrastructure.
 
 | This Agent (Queue) | Developer Agent | DevOps Agent |
 |--------------------|-----------------|--------------|
-| Job class design | Action dispatching code | Redis configuration |
+| Job class design | Controller/Service dispatching code | Redis configuration |
 | Queue configuration | Business logic | Worker process management |
-| Retry strategies | Vue components | Supervisor config |
+| Retry strategies | React components | Supervisor config |
 | Failure diagnosis | Form handling | Container setup |
 | Batch/chain design | API endpoints | Queue monitoring infra |
 
@@ -33,7 +33,7 @@ Build reliable, idempotent jobs for Laravel Redis-based queue infrastructure.
 |-------|------------------|
 | `laravel-specialist` | **Always** — Laravel queue patterns |
 | `debugging-wizard` | When diagnosing failed jobs |
-| `php-pro` | Strict PHP 8.4+ in job classes |
+| `php-pro` | Strict PHP 8.5+ in job classes |
 | `security-reviewer` | When jobs handle sensitive data |
 
 > See `.claude/rules/mcp-stack.md` for MCP tool reference.
@@ -46,12 +46,12 @@ Build reliable, idempotent jobs for Laravel Redis-based queue infrastructure.
 | Default Queue | `default` |
 | Monitoring | Laravel Telescope (development) |
 | Job Pattern | Standard `ShouldQueue` interface |
-| Dispatching | From Actions (`AsObject`) or Services |
-| PHP Version | 8.4+ with `declare(strict_types=1)` |
+| Dispatching | From Services |
+| PHP Version | 8.5+ with `declare(strict_types=1)` |
 
 ## Job Creation Pattern
 
-> Code patterns and canonical examples: see skill `laravel-actions-patterns` and @.claude/rules/migrations-queue.md.
+> Code patterns and canonical examples: see @.claude/rules/migrations-queue.md.
 
 ### Job Anatomy
 - `implements ShouldQueue` + `use Queueable`
@@ -60,8 +60,8 @@ Build reliable, idempotent jobs for Laravel Redis-based queue infrastructure.
 - `handle()` is idempotent — check for existing result before processing
 - `failed()` logs error without PII
 
-### Dispatching from Actions
-Dispatch from `AsObject` Business Actions or Services — never from Page Actions directly.
+### Dispatching from Services
+Dispatch from Service classes — never from Controllers directly.
 
 ## Job Design Rules
 

@@ -5,10 +5,13 @@
 ## PHP / Artisan
 
 ```bash
-docker compose exec app php artisan make:action Domain/ActionName
-docker compose exec app php artisan make:request Domain/RequestName
-docker compose exec app php artisan make:model ModelName -m
-docker compose exec app php artisan make:migration create_table_name_table
+docker compose exec app php artisan module:make ModuleName
+docker compose exec app php artisan module:make-controller ControllerName ModuleName
+docker compose exec app php artisan module:make-request RequestName ModuleName
+docker compose exec app php artisan module:make-model ModelName ModuleName -m
+docker compose exec app php artisan module:make-migration create_table_name_table ModuleName
+docker compose exec app php artisan module:make-job JobName ModuleName
+docker compose exec app php artisan module:make-policy PolicyName ModuleName
 docker compose exec app php artisan migrate
 docker compose exec app php artisan migrate:rollback
 docker compose exec app php artisan optimize:clear
@@ -30,7 +33,7 @@ docker compose exec app ./vendor/bin/rector process
 ```bash
 docker compose exec app php artisan test
 docker compose exec app php artisan test --coverage
-docker compose exec app php artisan test --mutate --covered-only --parallel --min=100
+docker compose exec app ./vendor/bin/infection --threads=max --min-msi=100
 docker compose exec app php artisan test tests/Unit/ExampleTest.php
 ```
 
@@ -53,4 +56,4 @@ docker compose exec app yarn install
 ```
 
 > **NEVER run commands outside Docker** — all dependencies exist only in the container.
-> **NEVER create Controllers** — this project uses Laravel Actions pattern.
+> **Place domain code inside its module** — `Modules/{Name}/`, never in a flat `app/` directory.

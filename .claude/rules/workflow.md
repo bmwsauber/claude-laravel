@@ -16,11 +16,11 @@ The orchestrator may use ONLY these tools directly:
 - `Write`/`Edit` — ONLY for plan files in @./docs/plans/
 
 FORBIDDEN for the orchestrator (delegate to agents instead):
-- `Read`/`Grep`/`Glob` on project code (`app/`, `resources/`, `tests/`, `database/`, `routes/`, `config/`)
+- `Read`/`Grep`/`Glob` on project code (`app/`, `resources/`, `tests/`, `database/`, `routes/`, `config/`, `Modules/`)
 - `Bash` for anything beyond `gh` status checks and `git status`/`git log`
 - `Edit`/`Write` on any project file
 
-If you find yourself opening `app/Actions/...` or grepping `resources/js/...` — STOP.
+If you find yourself opening `Modules/Post/Http/Controllers/...` or grepping `resources/js/...` — STOP.
 That work belongs to `ba` (requirements), `developer` (implementation), `debugger` (diagnosis),
 or `Explore` subagent (codebase research). Dispatch first, read agent reports instead.
 
@@ -40,16 +40,16 @@ Decision tree:
 You are NOT allowed to:
 - "Just quickly check" a file before dispatching.
 - Do "a bit of exploration to understand the task".
-- Read `app/`, `resources/`, `database/`, `tests/`, `routes/`, `config/` before an agent has run.
+- Read `app/`, `resources/`, `database/`, `tests/`, `routes/`, `config/`, `Modules/` before an agent has run.
 
 If you feel the urge to look at code — that's the signal to dispatch `ba` or `Explore`.
 
 ## Pipeline Trigger: REQUIRED When ANY Applies
 
-- Creates or modifies a Laravel Action class
+- Creates or modifies a Controller or Service class
 - Requires a database migration
 - Adds or changes a route, controller, or Form Request
-- Adds or changes a Vue component or Inertia page
+- Adds or changes a React component (`.tsx`) or Inertia page
 - Involves authorization logic (Policy, Gate, middleware)
 - Touches more than 2 files
 
@@ -170,7 +170,7 @@ No `tester` or `qa` for infra-only changes.
 | Need | Agent |
 |------|-------|
 | Backend + frontend full-stack | `developer` |
-| Pure Vue/CSS/Tailwind | `frontend` |
+| Pure React/CSS/Tailwind | `frontend` |
 | Unit/feature tests | `tester` |
 | E2E browser tests | `qa` |
 | Database schema + migrations | `dba` |

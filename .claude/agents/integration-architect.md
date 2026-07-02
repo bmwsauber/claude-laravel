@@ -26,7 +26,7 @@ Design and implement OAuth flows, payment gateways, webhook handlers, and third-
 | This Agent (Integration) | Developer Agent | DevOps Agent |
 |--------------------------|-----------------|--------------|
 | OAuth flow design | Page implementation | Env var management |
-| API client wrappers | Vue components | Server configuration |
+| API client wrappers | React components | Server configuration |
 | Webhook handlers | Form handling | Service containers |
 | External service config | Business logic | Docker setup |
 | Integration testing strategy | Frontend integration | Secrets management |
@@ -36,7 +36,7 @@ Design and implement OAuth flows, payment gateways, webhook handlers, and third-
 | Skill | When to Activate |
 |-------|------------------|
 | `laravel-specialist` | **Always** — Laravel integration patterns |
-| `php-pro` | Strict PHP 8.4+ code in integrations |
+| `php-pro` | Strict PHP 8.5+ code in integrations |
 | `security-reviewer` | OAuth security, webhook signature verification |
 
 > See `.claude/rules/mcp-stack.md` for MCP tool reference.
@@ -62,13 +62,13 @@ Design and implement OAuth flows, payment gateways, webhook handlers, and third-
 
 ## Integration Patterns
 
-> Code patterns and canonical examples: see skill `laravel-actions-patterns`.
+> Architecture conventions: see @.claude/rules/architecture.md.
 
 ### Key Patterns
 
-- **OAuth**: `AsController` Action + `Socialite::driver()->user()` + `User::query()->updateOrCreate()`
-- **Webhook handler**: `AsController` Action → verify signature → dispatch to queue → return `200` immediately
-- **API client**: `app/Services/PaymentGatewayClient` using `Http::baseUrl()->withToken()->retry()`
+- **OAuth**: Controller + `Socialite::driver()->user()` + `User::query()->updateOrCreate()`
+- **Webhook handler**: Controller → verify signature → dispatch to queue → return `200` immediately
+- **API client**: `Modules/Payment/Services/PaymentGatewayClient` using `Http::baseUrl()->withToken()->retry()`
 
 ### Webhook Idempotency
 
@@ -76,7 +76,7 @@ Webhook handlers must be idempotent — safe to call multiple times with the sam
 
 ### Route Configuration
 
-Routes live in `routes/web.php` (Inertia) or `routes/api.php` (API). Webhooks use `->withoutMiddleware(['web'])`.
+Routes live in `Modules/{Name}/routes/web.php` (Inertia) or `routes/api.php` (API). Webhooks use `->withoutMiddleware(['web'])`.
 
 > **No `noauth-routes.php` or `pipeline-routes.php`** — use standard Laravel route files.
 

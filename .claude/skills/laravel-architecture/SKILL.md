@@ -4,7 +4,7 @@ description:
     Generates a Laravel architecture based on best practices for modern Laravel
     applications.
 
-    Українською: архітектура Laravel, структура проєкту, патерни Laravel, сервісний шар, екшни, доменна логіка, організація коду, спроєктуй архітектуру, створи структуру, рефакторинг архітектури, доменна структура, Action клас
+    Українською: архітектура Laravel, структура проєкту, патерни Laravel, сервісний шар, доменна логіка, організація коду, спроєктуй архітектуру, створи структуру, рефакторинг архітектури, доменна структура, модульна архітектура, Service клас
 ---
 
 # Laravel Architecture
@@ -13,13 +13,15 @@ description:
 
 ### Architecture Patterns
 
-- **Laravel Actions**: Business logic organized in Action classes
-  (`lorisleiva/laravel-actions`)
-- **Inertia.js**: Frontend built with Vue.js via Inertia.js
-- **Domain Organization**: Features organized by domain (Auth, Posts,
+- **Controllers + Services**: HTTP entry via Controllers, business logic in
+  Service classes
+- **Modular Architecture**: domains organized as modules under `Modules/{Name}/`
+  via `nwidart/laravel-modules`; namespace has no `App` segment
+- **Inertia.js**: Frontend built with React (TypeScript) via Inertia.js
+- **Domain Organization**: Features organized by module (Auth, Posts,
   etc.)
 - **Repository Pattern**: Not explicitly used, relies on Eloquent models
-- **Service Layer**: Implemented via Action classes
+- **Service Layer**: Implemented via dedicated Service classes
 - **Database Migrations**: Every change in the DB structure should be reflected
   in a new migration
 - **Database Seeders**: Every change in DB data should be reflected in a seeder
@@ -39,7 +41,7 @@ description:
 - **Database**: PostgreSQL with proper indexing
 - **Asset Optimization**: Image optimization tools included in Docker setup
 
-### Laravel 12 Structure
+### Laravel 13 Structure
 
 - No middleware files in `app/Http/Middleware/`.
 - `bootstrap/app.php` is the file to register middleware, exceptions, and
